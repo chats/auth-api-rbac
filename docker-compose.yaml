@@ -1,0 +1,58 @@
+#version: '3.8'
+
+services:
+  # ฐานข้อมูล PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: auth-api-postgres
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_api
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - auth-network
+
+  # แอปพลิเคชัน Auth API
+  auth-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_DBNAME=auth_api
+      - DATABASE_SSLMODE=disable
+      - JWT_SECRETKEY=your-secret-key-change-this-in-production
+      - JWT_ISSUER=auth-api
+      - JWT_TOKENDURATION=24h
+    networks:
+      - auth-network
+
+volumes:
+  postgres_data:
+    name: auth-api-postgres-data
+
+networks:
+  auth-network:
+    name: auth-network
+    driver: bridge
