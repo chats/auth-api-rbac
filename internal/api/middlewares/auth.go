@@ -10,7 +10,8 @@ import (
 )
 
 // AuthMiddleware ตรวจสอบความถูกต้องของ JWT token
-func AuthMiddleware(jwtService *jwt.JWTService, authService *service.AuthService) gin.HandlerFunc {
+// func AuthMiddleware(jwtService *jwt.JWTService, authService *service.AuthService) gin.HandlerFunc {
+func AuthMiddleware(jwtService *jwt.JWTService, authService service.AuthServiceInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {

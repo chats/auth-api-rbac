@@ -1,4 +1,4 @@
-# AUTH-API (RBAC)
+# AUTH-API (Sample RBAC)
 ## API Endpoints
 ### การ Authentication
 - POST /api/login: เข้าสู่ระบบและรับ JWT token
@@ -8,7 +8,6 @@
   "password": "adminpassword"
 }
 ```
-
 ### การจัดการผู้ใช้ (User Management)
 - ```GET /api/users```: รับรายการผู้ใช้ทั้งหมด
 - ```GET /api/users/:id```: รับข้อมูลผู้ใช้ตาม ID
@@ -17,7 +16,6 @@
 - ```DELETE /api/users/:id```: ลบผู้ใช้
 - ```POST /api/users/:id/roles```: เพิ่มบทบาทให้กับผู้ใช้
 - ```DELETE /api/users/:id/roles/:roleId```: ลบบทบาทออกจากผู้ใช้
-
 ### การจัดการบทบาท (Role Management)
 - ```GET /api/roles```: รับรายการบทบาททั้งหมด
 - ```GET /api/roles/:id```: รับข้อมูลบทบาทตาม ID
@@ -26,7 +24,6 @@
 - ```DELETE /api/roles/:id```: ลบบทบาท
 - ```POST /api/roles/:id/permissions```: เพิ่มสิทธิ์ให้กับบทบาท
 - ```DELETE /api/roles/:id/permissions/:permissionId```: ลบสิทธิ์ออกจากบทบาท
-
 ### การจัดการสิทธิ์ (Permission Management)
 - ```GET /api/permissions```: รับรายการสิทธิ์ทั้งหมด
 - ```GET /api/permissions/:id```: รับข้อมูลสิทธิ์ตาม ID
@@ -34,6 +31,7 @@
 - ```PUT /api/permissions/:id```: อัปเดตข้อมูลสิทธิ์
 - ```DELETE /api/permissions/:id```: ลบสิทธิ์
 
+<br>
 
 ## ตัวอย่างการใช้งาน
 1. การเข้าสู่ระบบ (Login)
@@ -65,3 +63,11 @@ curl -X POST http://localhost:8080/api/users/2/roles \
   -H "Content-Type: application/json" \
   -d '{"role_id": 2}'
 ```
+
+<br>
+
+## Tests
+1. Create database ```auth_api_test```
+2. Run ```make test-unit``` for unit tests
+3. Run ```make test-integration``` for integration tests
+4. Run ```make test``` for all tests

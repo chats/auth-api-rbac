@@ -9,7 +9,8 @@ import (
 )
 
 // RequirePermission ตรวจสอบว่าผู้ใช้มีสิทธิ์ที่ต้องการหรือไม่
-func RequirePermission(authService *service.AuthService, resource string, action string) gin.HandlerFunc {
+// func RequirePermission(authService *service.AuthService, resource string, action string) gin.HandlerFunc {
+func RequirePermission(authService service.AuthServiceInterface, resource string, action string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// ดึง userID จาก context ที่ถูกตั้งค่าโดย AuthMiddleware
 		userIDValue, exists := c.Get("userID")
