@@ -67,7 +67,90 @@ curl -X POST http://localhost:8080/api/users/2/roles \
 <br>
 
 ## Tests
-1. Create database ```auth_api_test```
-2. Run ```make test-unit``` for unit tests
-3. Run ```make test-integration``` for integration tests
-4. Run ```make test``` for all tests
+
+### หลักการทดสอบที่ใช้
+
+1. Unit Testing: ทดสอบส่วนประกอบย่อยๆ แยกจากกัน เช่น:
+	- ทดสอบโมเดล User และการเข้ารหัสรหัสผ่าน
+	- ทดสอบระบบ JWT
+	- ทดสอบ Service และ Middleware
+
+2. Integration Testing: ทดสอบการทำงานร่วมกันของหลายส่วนประกอบ:
+	- ทดสอบ API endpoints ทั้งระบบ
+
+3. Mock Testing: จำลองส่วนประกอบบางอย่างในระบบ เช่น ฐานข้อมูล เพื่อให้สามารถทดสอบได้อย่างแยกส่วน
+	- จำลองฐานข้อมูลโดยไม่ต้องใช้ฐานข้อมูลจริง
+	- จำลอง interfaces ต่างๆ เพื่อควบคุมพฤติกรรมในการทดสอบ
+
+
+4. Behavior-Driven Development (BDD): ใช้แนวคิดการทดสอบตามพฤติกรรมที่คาดหวัง
+	- ใช้รูปแบบ Test Suite
+
+
+
+### Framework และ Libraries ที่ใช้
+
+1. testing: แพ็คเกจมาตรฐานของ Go สำหรับการทดสอบ
+2. stretchr/testify:
+	- ```assert```: ใช้สำหรับการตรวจสอบค่าที่คาดหวัง
+	- ```suite```: ใช้สำหรับจัดกลุ่มการทดสอบและจัดการ setup/teardown
+
+3. DATA-DOG/go-sqlmock: ใช้จำลองฐานข้อมูล SQL
+	- จำลองการเรียกใช้ SQL queries และกำหนดผลลัพธ์
+	- ทดสอบโดยไม่ต้องเชื่อมต่อกับฐานข้อมูลจริง
+
+4. golang/mock/mockgen: สร้าง mock objects จาก interfaces
+	- ใช้จำลองพฤติกรรมของ interfaces ต่างๆ
+
+5. steinfletcher/apitest: ใช้ทดสอบ API endpoints
+	- สร้าง HTTP requests ไปยัง endpoints
+	- ตรวจสอบ HTTP responses
+
+6. steinfletcher/apitest-jsonpath: ใช้ตรวจสอบข้อมูล JSON ใน response
+	- ตรวจสอบข้อมูลใน JSON ด้วย JSONPath expressions
+
+
+### ประเภทของการทดสอบ
+
+1. โมเดลทดสอบ:
+	- ทดสอบการเข้ารหัสและตรวจสอบรหัสผ่าน
+	- ทดสอบ hooks ต่างๆ เช่น BeforeCreate
+
+
+2. ทดสอบ JWT:
+	- ทดสอบการสร้างและตรวจสอบ tokens
+	- ทดสอบ tokens ที่หมดอายุหรือไม่ถูกต้อง
+
+
+3. ทดสอบ Service:
+	- ทดสอบการ login สำเร็จและไม่สำเร็จ
+	- ทดสอบการดึงข้อมูลผู้ใช้
+	- ทดสอบการตรวจสอบสิทธิ์
+
+
+4. ทดสอบ Middleware:
+	- ทดสอบการตรวจสอบ JWT tokens
+	- ทดสอบการตรวจสอบสิทธิ์และบทบาท
+
+
+5. ทดสอบ API Integration:
+	- ทดสอบการเรียกใช้ API endpoints ทั้งหมด
+	- ทดสอบการทำงานร่วมกันของทั้งระบบ
+
+### Run Tests
+```
+# รัน unit tests
+make test-unit
+
+# รัน integration tests
+make test-integration
+
+# รัน tests ทั้งหมด
+make test
+
+# รัน tests พร้อมสร้างรายงานความครอบคลุมของโค้ด
+make cover
+
+# รัน tests ด้วย Docker
+make docker-compose-test
+```
